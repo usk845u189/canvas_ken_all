@@ -6,7 +6,7 @@ $post_address = $x  . $y;
 
 $address_list = [];
 
-$fp = fopen("utf_ken_all.csv","r");
+$fp = fopen("../data/utf_ken_all.csv","r");
 $line = fgetcsv($fp);
 while ($line != false) {
     if ($line[2] === $post_address) {
