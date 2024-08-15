@@ -1,26 +1,33 @@
 <?php
-$x = $_POST["x"];
-$y = $_POST["y"];
+$x = filter_input(INPUT_POST,"x", FILTER_SANITIZE_STRING);
+$y = filter_input(INPUT_POST,"y", FILTER_SANITIZE_STRING);
 
-$post_address = $x  . $y;
+$postal_code = $x  . $y;
 
-$address_list = [];
-
-$fp = fopen("../data/utf_ken_all.csv","r");
-$line = fgetcsv($fp);
-while ($line != false) {
-    if ($line[2] === $post_address) {
-        $address_list[] = $line;
-    }
-    $line = fgetcsv($fp);
-}
-
-fclose($fp);
-
-if (empty($address_list)) {
+if (strlen($postal_code) != 7) {
     header("Location: error.html");
     exit();
 }
+
+$stmt = $pdo->prepare("SELECT prefecture, city, town FROM postal_codes WHERE postal_code = :postal_code");
+$stmt->execute(['postal_code'=>$postal_code]);
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// $fp = fopen("../data/utf_ken_all.csv","r");
+// $line = fgetcsv($fp);
+// while ($line != false) {
+//     if ($line[2] === $postal_code) {
+//         $address_list[] = $line;
+//     }
+//     $line = fgetcsv($fp);
+// }
+
+// fclose($fp);
+
+// if (empty($address_list)) {
+//     header("Location: error.html");
+//     exit();
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,10 +44,10 @@ if (empty($address_list)) {
             <th>郵便番号</th>
             <th>住所</th>
         </tr>
-        <?php for ($i=0; $i < count($address_list); $i++) { ?>
+        <?php foreach ($results as $row) { ?>
             <tr>
-                <td><?php echo $address_list[$i][2] ?></td>
-                <td><?php echo $address_list[$i][6] . $address_list[$i][7] .$address_list[$i][8] ?></td>
+                <td><?php echo $row['postal_code'] ?></td>
+                <td><?php echo $row['prefecture'] . $row['city'] . $row['town'] ?></td>
             </tr>
         <?php } ?>
     </table>
