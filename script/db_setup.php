@@ -1,7 +1,7 @@
 <?php
-require_once("..\config\config.php");
+require_once("../config/config.php");
 
-$csvFile = __DIR__ ."\..\data\utf_ken_all_utf8.csv";
+$csvFile = __DIR__ ."/../data/utf_ken_all.csv";
 
 try{
     $pdo->beginTransaction();
@@ -19,7 +19,7 @@ try{
     $error_list = [];
     if (($handle=fopen($csvFile,"r")) !== FALSE) {
         while (($postal_data = fgetcsv($handle)) !== FALSE) {
-            if (count($hanle) !== 14){
+            if (count($postal_data) !== 14){
                 $error_list[] = $postal_data;
                 continue;
             }
@@ -32,6 +32,10 @@ try{
     echo "データのセットアップが完了しました。" . PHP_EOL;
     var_dump($error_list);
 } catch(Exception $e){
-    $pdo->rollBack();
-    echo "Failed". $e->getMessage() . PHP_EOL;
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+
+    // $pdo->rollBack();
+    echo "データのセットアップが失敗しました。". $e->getMessage() . PHP_EOL;
 }
