@@ -1,4 +1,6 @@
 <?php
+set_time_limit(0); 
+
 require_once("../config/config.php");
 
 $csvFile = __DIR__ ."/../data/utf_ken_all.csv";
@@ -17,15 +19,19 @@ try{
     $stmt = $pdo->prepare("INSERT INTO postal_codes (postal_code, prefecture, city, town) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefecture=VALUES(prefecture), city=VALUES(city), town=VALUES(town)");
 
     $error_list = [];
-    if (($handle=fopen($csvFile,"r")) !== FALSE) {
+    $handle = fopen($csvFile, "r");
+
+    if ($handle !== FALSE) {
         while (($postal_data = fgetcsv($handle)) !== FALSE) {
-            if (count($postal_data) !== 14){
+            if (count($postal_data) !== 15) {
                 $error_list[] = $postal_data;
                 continue;
             }
             $stmt->execute([$postal_data[2], $postal_data[6], $postal_data[7], $postal_data[8]]);
         }
         fclose($handle);
+    } else {
+        throw new Exception("CSVファイルを開くことができませんでした。");
     }
 
     $pdo->commit();
