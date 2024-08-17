@@ -1,4 +1,6 @@
 <?php
+require_once("../config/config.php");
+
 $x = filter_input(INPUT_POST,"x", FILTER_SANITIZE_STRING);
 $y = filter_input(INPUT_POST,"y", FILTER_SANITIZE_STRING);
 
@@ -9,25 +11,10 @@ if (strlen($postal_code) != 7) {
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT prefecture, city, town FROM postal_codes WHERE postal_code = :postal_code");
+$stmt = $pdo->prepare("SELECT postal_code, prefecture, city, town FROM postal_codes WHERE postal_code = :postal_code");
 $stmt->execute(['postal_code'=>$postal_code]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// $fp = fopen("../data/utf_ken_all.csv","r");
-// $line = fgetcsv($fp);
-// while ($line != false) {
-//     if ($line[2] === $postal_code) {
-//         $address_list[] = $line;
-//     }
-//     $line = fgetcsv($fp);
-// }
-
-// fclose($fp);
-
-// if (empty($address_list)) {
-//     header("Location: error.html");
-//     exit();
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +38,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         <?php } ?>
     </table>
-    <a href="top.html">戻る</a>
+    <a href="index.html">戻る</a>
 </body>
 </html>

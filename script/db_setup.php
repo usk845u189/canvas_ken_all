@@ -27,6 +27,9 @@ try{
                 $error_list[] = $postal_data;
                 continue;
             }
+            if ($postal_data[8]=="以下に掲載がない場合") {
+                $postal_data[8] = "";
+            }
             $stmt->execute([$postal_data[2], $postal_data[6], $postal_data[7], $postal_data[8]]);
         }
         fclose($handle);
@@ -36,7 +39,6 @@ try{
 
     $pdo->commit();
     echo "データのセットアップが完了しました。" . PHP_EOL;
-    var_dump($error_list);
 } catch(Exception $e){
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
