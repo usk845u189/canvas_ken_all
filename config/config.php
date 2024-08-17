@@ -8,11 +8,9 @@ try {
     $pdo = new PDO($dsn, $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // データベース内のテーブル一覧を取得
     $query = $pdo->query("SHOW TABLES");
     $tables = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    // テーブル一覧を出力
     var_dump($tables);
     
     // $pdo = new PDO($dsn, $user, $password);
