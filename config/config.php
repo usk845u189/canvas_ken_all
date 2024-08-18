@@ -11,7 +11,7 @@ try {
     $query = $pdo->query("SHOW TABLES");
     $tables = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    var_dump($tables);
+    // var_dump($tables); //テーブル確認用 
     
 } catch (PDOException $e) {
     print('Error:' . $e->getMessage());

@@ -4,7 +4,7 @@ require_once("../config/config.php");
 $x = filter_input(INPUT_POST,"x", FILTER_SANITIZE_STRING);
 $y = filter_input(INPUT_POST,"y", FILTER_SANITIZE_STRING);
 
-$postal_code = $x  . $y;
+$postal_code = htmlspecialchars($x)  . htmlspecialchars($y);
 
 if (strlen($postal_code) != 7) {
     header("Location: error.html");
