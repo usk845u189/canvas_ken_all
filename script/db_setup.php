@@ -14,6 +14,7 @@ try{
         prefecture VARCHAR(100) NOT NULL, 
         city VARCHAR(100) NOT NULL, 
         town VARCHAR(100) NOT NULL, 
+        INDEX (postal_code)
     )");
 
     $stmt = $pdo->prepare("INSERT INTO postal_codes (postal_code, prefecture, city, town) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefecture=VALUES(prefecture), city=VALUES(city), town=VALUES(town)");
