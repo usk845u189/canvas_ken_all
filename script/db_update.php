@@ -39,7 +39,7 @@ try{
     }
     
     $insert_handle = fopen($insert_csvFile,"r");
-    if ($delete_handle !== False) {
+    if ($insert_handle !== False) {
         while (($postal_data = fgetcsv($insert_handle)) !== FALSE){
             if (count($postal_data) !== 15) {
                 $error_list[] = $postal_data;

@@ -9,11 +9,11 @@
     <h3>ADDRESS SEARCH</h3>
     <p>郵便番号を入力してください（〇〇〇-△△△△）</p>
     <hr>
-    <form action="search.php" method="post">
+    <form action="search.php" method="get">
         〒
-        <input type="number" name="x">
+        <input type="number" name="postal_half_x">
         -
-        <input type="number" name="y">
+        <input type="number" name="postal_half_y">
         <input type="submit" value="Search">
     </form>
 </body>

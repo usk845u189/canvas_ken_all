@@ -1,19 +1,19 @@
 <?php
 require_once("../config/config.php");
 
-$x = filter_input(INPUT_POST,"x", FILTER_SANITIZE_STRING);
-$y = filter_input(INPUT_POST,"y", FILTER_SANITIZE_STRING);
+$postal_half_x = filter_input(INPUT_GET,"postal_half_x", FILTER_SANITIZE_STRING);
+$postal_half_y = filter_input(INPUT_GET,"postal_half_y", FILTER_SANITIZE_STRING);
 
-$postal_code = htmlspecialchars($x)  . htmlspecialchars($y);
+$postal_code = htmlspecialchars($postal_half_x)  . htmlspecialchars($postal_half_y);
 
 if (strlen($postal_code) != 7) {
     header("Location: error.html");
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT postal_code, prefecture, city, town FROM postal_codes WHERE postal_code = :postal_code");
-$stmt->execute(['postal_code'=>$postal_code]);
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$search_stmt = $pdo->prepare("SELECT postal_code, prefecture, city, town FROM postal_codes WHERE postal_code = :postal_code");
+$search_stmt->execute(['postal_code'=>$postal_code]);
+$results = $search_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>

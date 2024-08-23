@@ -6,7 +6,7 @@ require_once("../config/config.php");
 $csvFile = __DIR__ ."/../data/utf_ken_all.csv";
 
 try{
-    $pdo->beginTransaction();
+    $pdo->exec("DROP TABLE IF EXISTS postal_codes");
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS postal_codes (
         id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -17,13 +17,16 @@ try{
         INDEX (postal_code)
     )");
 
+    $pdo->beginTransaction();
+
+
     $stmt = $pdo->prepare("INSERT INTO postal_codes (postal_code, prefecture, city, town) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE prefecture=VALUES(prefecture), city=VALUES(city), town=VALUES(town)");
     
     $error_list = [];
     $handle = fopen($csvFile, "r");
 
-    if ($handle !== FALSE) {
-        while (($postal_data = fgetcsv($handle)) !== FALSE) {
+    if ($handle) {
+        while (($postal_data = fgetcsv($handle)) !== False) {
             if (count($postal_data) !== 15) {
                 $error_list[] = $postal_data;
                 continue;
